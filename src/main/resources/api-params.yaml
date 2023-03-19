@@ -1,0 +1,16 @@
+deploymentIdPathParam:
+  name: 'deploymentId'
+  in: 'path'
+  description: 'The id of deployment'
+  required: true
+  schema:
+    type: 'string'
+    format: 'uuid'
+
+snapshotTypeQueryParam:
+  name: 'type'
+  in: 'query'
+  description: 'Snapshot/Config'
+  required: true
+  schema:
+    $ref: 'api-defs.yaml#/SnapshotType'

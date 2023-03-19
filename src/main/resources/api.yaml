@@ -1,0 +1,47 @@
+openapi: 3.0.1
+info:
+  description: Vaibhav Jain's init project
+  version: 1.0.0
+  title: Vaibhav Jain's init project
+  contact:
+    name: jainva
+  license:
+    name: 'Copyright (c) 2022 jainva, Inc. All rights reserved.'
+  x-vmw-vapi-codegenconfig:
+    package-name: com.jainva.test.api
+    tag-resources-by-url-path: true
+servers:
+  - url: '/api/v1'
+tags:
+  - name: employees-data
+    description: 'Activities-data related logical API group'
+paths:
+  '/api/v1/employees':
+    get:
+      tags:
+        - employees-data
+      summary: Retrieve all employees data
+      description: Get all employees
+      operationId: getEmployeesData
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeesData'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+components:
+  parameters:
+    deploymentIdPathParam:
+      $ref: 'api-params.yaml#/deploymentIdPathParam'
+  schemas:
+    GetActivitiesQuery:
+      $ref: 'api-defs.yaml#/GetActivitiesQuery'
+    EmployeesData:
+      $ref: 'api-defs.yaml#/EmployeesData'

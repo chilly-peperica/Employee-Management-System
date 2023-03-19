@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+//****************** SOURCE OF SWAGGER AUTOCODEGEN ******************
+//https://github.com/DevProblems/openapigen-swaggerui-springboot/blob/master/pom.xml
+
 
 @RestController
 public class EmployeesController implements EmployeesDataApiDelegate {

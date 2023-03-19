@@ -18,24 +18,28 @@ GetActivitiesQuery:
       type: 'string'
 
 EmployeesData:
-  employees:
-    type: array
-    items:
-      $ref: '#/Employee'
+  type: object
+  properties:
+    employees:
+      type: array
+      items:
+        $ref: '#/Employee'
 Employee:
-  employee_id:
-    type: string
-    format: uuid
-  name:
-    type: string
-  salary:
-    type: integer
-  address:
-    type: string
-  manager:
+  type: object
+  properties:
     employee_id:
       type: string
       format: uuid
+    name:
+      type: string
+    salary:
+      type: integer
+    address:
+      type: string
+    manager:
+      employee_id:
+        type: string
+        format: uuid
 
 
 

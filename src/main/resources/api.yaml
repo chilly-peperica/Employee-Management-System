@@ -22,7 +22,7 @@ paths:
         - employees-data
       summary: Retrieve all employees data
       description: Get all employees
-      operationId: getEmployeesData
+      operationId: getAllEmployeesData
       responses:
         '200':
           description: OK

@@ -7,9 +7,6 @@ info:
     name: jainva
   license:
     name: 'Copyright (c) 2022 jainva, Inc. All rights reserved.'
-  x-vmw-vapi-codegenconfig:
-    package-name: com.jainva.test.api
-    tag-resources-by-url-path: true
 servers:
   - url: '/api/v1'
 tags:
@@ -22,9 +19,9 @@ paths:
         - employees-data
       summary: Retrieve all employees data
       description: Get all employees
-      operationId: getEmployeesData
+      operationId: getAllEmployeesData
       responses:
-        '200':
+        200:
           description: OK
           content:
             application/json:

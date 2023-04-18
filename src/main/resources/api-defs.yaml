@@ -35,11 +35,24 @@ Employee:
     salary:
       type: integer
     address:
+      $ref: '#/Address'
+    joining:
       type: string
-    manager:
-      employee_id:
-        type: string
-        format: uuid
+      format: date
+    position_id:
+      type: int
+
+Address:
+  type: object
+  properties:
+    country:
+      type: string
+    pin_code:
+      type: long
+    city:
+      type: string
+    state:
+      type: string
 
 
 

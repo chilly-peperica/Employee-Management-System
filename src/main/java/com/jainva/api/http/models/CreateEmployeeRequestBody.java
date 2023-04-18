@@ -1,7 +1,9 @@
 package com.jainva.api.http.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jainva.api.models.Employee;
+
+import java.util.UUID;
+
 
 public class CreateEmployeeRequestBody {
 
@@ -29,13 +31,6 @@ public class CreateEmployeeRequestBody {
         this.address = address;
     }
 
-    public int getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(int managerId) {
-        this.managerId = managerId;
-    }
 
     @JsonProperty("name")
     String name;
@@ -43,6 +38,5 @@ public class CreateEmployeeRequestBody {
     int salary;
     @JsonProperty("address")
     String address;
-    @JsonProperty("manager_id")
-    int  managerId;
+
 }

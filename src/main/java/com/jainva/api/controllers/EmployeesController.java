@@ -1,20 +1,17 @@
 package com.jainva.api.controllers;
 
-import com.jainva.api.http.models.CreateEmployeeRequestBody;
 import com.jainva.api.services.EmployeServices;
 import com.openapi.gen.springboot.api.EmployeesDataApi;
-import com.openapi.gen.springboot.api.EmployeesDataApiDelegate;
+import com.openapi.gen.springboot.dto.CreateEmployeeRequest;
+import com.openapi.gen.springboot.dto.Employee;
 import com.openapi.gen.springboot.dto.EmployeesData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.time.LocalDate;
 
 //****************** SOURCE OF SWAGGER AUTOCODEGEN ******************
 //https://github.com/DevProblems/openapigen-swaggerui-springboot/blob/master/pom.xml
@@ -30,16 +27,19 @@ public class EmployeesController implements EmployeesDataApi {
         this.empServices = empServices;
     }
 
-//    @PostMapping("/api/v1/employee")
-//    public void createEmployee(@RequestBody CreateEmployeeRequestBody body) {
-//        try {
-//            System.out.println("Post request to the server from controller layer");
-//            empServices.createEmployee(body);
-//        } catch (Exception e) {
-//            ResponseEntity.internalServerError()
-//                    .body(e.getMessage());
-//        }
-//    }
+
+    @Override
+    public ResponseEntity<Employee> createEmployee(CreateEmployeeRequest request) {
+        try {
+            if (request.getCorporateDetails().getJoining() == null) {
+                request.getCorporateDetails().setJoining(LocalDate.now());
+            }
+            return ResponseEntity.ok().body(empServices.createEmployee(request));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+    }
 
     @Override
     public ResponseEntity<EmployeesData> getAllEmployeesData() {

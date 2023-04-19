@@ -30,16 +30,51 @@ Employee:
     employee_id:
       type: string
       format: uuid
+    personal_details:
+      $ref: '#/PersonalDetails'
+    corporate_details:
+      $ref: '#/CorporateDetails'
+CreateEmployeeRequest:
+  properties:
+    personal_details:
+      $ref: '#/PersonalDetails'
+    corporate_details:
+      $ref: '#/CorporateDetails'
+
+PersonalDetails:
+  type: object
+  properties:
     name:
       type: string
+      required: true
+    address:
+      $ref: '#/Address'
+    mobile_number:
+      type: string
+      required: true
+
+CorporateDetails:
+  type: object
+  properties:
     salary:
       type: integer
-    address:
+    joining:
       type: string
-    manager:
-      employee_id:
-        type: string
-        format: uuid
+      format: date
+    position_id:
+      type: int
+
+Address:
+  type: object
+  properties:
+    country:
+      type: string
+    pin_code:
+      type: long
+    city:
+      type: string
+    state:
+      type: string
 
 
 

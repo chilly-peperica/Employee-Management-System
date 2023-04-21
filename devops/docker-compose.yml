@@ -1,0 +1,53 @@
+version: '2.3'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=ems
+      - POSTGRES_PASSWORD=1234
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "data_sink" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 15s
+
+#  schema:
+#    build: ../postgres-schema
+#    container_name: ds-schema
+#    environment:
+#      POSTGRES_DB_TYPE: local
+#      POSTGRES_DB_HOST_URL: ds-postgres
+#      POSTGRES_DB_PORT: 5432
+#      POSTGRES_DB_USERNAME: data_sink
+#      POSTGRES_DB_PASSWORD: data_sink
+#      POSTGRES_DB_NAME: data_sink
+#    depends_on:
+#      ds-postgres:
+#        condition: service_healthy
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    ports:
+      - 5052:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      - "PGADMIN_DEFAULT_EMAIL=${EMAIL_ID:-vaibhav@pgadmin.org}"
+      - "PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-1233}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

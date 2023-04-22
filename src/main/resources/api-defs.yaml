@@ -27,9 +27,9 @@ EmployeesData:
 Employee:
   type: object
   properties:
-    employee_id:
-      type: string
-      format: uuid
+#    employee_id:
+#      type: string
+#      format: uuid
     personal_details:
       $ref: '#/PersonalDetails'
     corporate_details:

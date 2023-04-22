@@ -9,15 +9,19 @@ import java.util.*;
 public class EmployeServices {
 
 
-    public Map<UUID, Employee> db;
+    public List<Employee> db = new ArrayList<>();
 
     EmployeServices() {
-        init();
+        try {
+            init();
+        }catch (Exception e){
+            System.out.println(e.getMessage()+ " with stack trace "+ e.getStackTrace());
+        }
+
     }
 
     public void init() {
         Employee e1 = new Employee();
-        e1.setEmployeeId(UUID.randomUUID());
         PersonalDetails p1 = new PersonalDetails();
         CorporateDetails c1 = new CorporateDetails();
         p1.setName("Raghu Ram Rajan");
@@ -33,7 +37,6 @@ public class EmployeServices {
         e1.setCorporateDetails(c1);
 
         Employee e2 = new Employee();
-        e2.setEmployeeId(UUID.randomUUID());
         PersonalDetails p2 = new PersonalDetails();
         CorporateDetails c2 = new CorporateDetails();
         p2.setName("Mark Lohemyer");
@@ -47,9 +50,8 @@ public class EmployeServices {
         e2.setPersonalDetails(p2);
         e2.setCorporateDetails(c2);
 
-        db = new HashMap<>();
-        db.put(e1.getEmployeeId(), e1);
-        db.put(e2.getEmployeeId(), e2);
+        db.add( e1);
+        db.add(e2);
 
 
     }
@@ -57,17 +59,17 @@ public class EmployeServices {
     public Employee createEmployee(CreateEmployeeRequest body) {
         Employee emp = new Employee();
 
-        UUID eid = UUID.randomUUID();
-        // Protects our DB for employee ID collission
-        while (db.containsKey(eid)) {
-            eid = UUID.randomUUID();
-        }
-        emp.setEmployeeId(eid);
+//        UUID eid = UUID.randomUUID();
+//        // Protects our DB for employee ID collission
+//        while (db.containsKey(eid)) {
+//            eid = UUID.randomUUID();
+//        }
+//        emp.setEmployeeId(eid);
         emp.setPersonalDetails(body.getPersonalDetails());
         emp.setCorporateDetails(body.getCorporateDetails());
         CorporateDetails cd = new CorporateDetails();
-        System.out.println("Pushing the user into db : " + emp.getEmployeeId() + " before is : " + db.size());
-        db.put(eid, emp);
+        System.out.println("Pushing the user into db : " + emp + " before is : " + db.size());
+        db.add(emp);
         return emp;
     }
 
@@ -75,10 +77,9 @@ public class EmployeServices {
         System.out.println("Get employees api call to server");
         List<Employee> employees = new ArrayList<>();
 
-        for (UUID key : db.keySet()) {
-            System.out.println("Getting data for key :" + key + " with value : " + db.get(key));
-            employees.add(db.get(key));
+        for (Employee e : db) {
+            System.out.println("Getting employee : " + e);;
         }
-        return employees;
+        return db;
     }
 }

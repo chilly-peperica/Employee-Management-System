@@ -31,8 +31,8 @@ public class EmployeesController implements EmployeesDataApi {
     @Override
     public ResponseEntity<Employee> createEmployee(CreateEmployeeRequest request) {
         try {
-            if (request.getCorporateDetails().getJoining() == null) {
-                request.getCorporateDetails().setJoining(LocalDate.now());
+            if (request.getCorporateDetails().getJoiningDate() == null) {
+                request.getCorporateDetails().setJoiningDate(LocalDate.now());
             }
             return ResponseEntity.ok().body(empServices.createEmployee(request));
         } catch (Exception e) {

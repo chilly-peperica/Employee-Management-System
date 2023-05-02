@@ -58,7 +58,7 @@ CorporateDetails:
   properties:
     salary:
       type: integer
-    joining:
+    joining_date:
       type: string
       format: date
     position_id:

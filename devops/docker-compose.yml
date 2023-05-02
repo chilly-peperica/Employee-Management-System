@@ -1,0 +1,40 @@
+version: '2.3'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=ems
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=employees
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "data_sink" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 15s
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    ports:
+      - 5052:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      - "PGADMIN_DEFAULT_EMAIL=${EMAIL_ID:-vaibhav@pgadmin.org}"
+      - "PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-1233}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS z} ${HOSTNAME} [priority='%p' thread='%t' user='%X{user}' org='%X{org}' rootTrace='%X{rootTrace}' trace='%X{trace}'] %c:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>true</includeCallerData>
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
+<!--    <if condition='property("LOG_FORWARDING_ENABLED").contains("true")'>-->
+<!--        <then>-->
+<!--            <variable name="SERVICE_LOGS_OUTPUT_PORT" value="${SERVICE_LOGS_OUTPUT_PORT:-5170}" />-->
+<!--            <appender name="LOG_FORWARDER" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+<!--                <destination>localhost:${SERVICE_LOGS_OUTPUT_PORT}</destination>-->
+<!--                <writeBufferSize>2048</writeBufferSize>-->
+<!--                <writeTimeout>10 seconds</writeTimeout>-->
+<!--                <reconnectionDelay>5 seconds</reconnectionDelay>-->
+
+<!--                <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
+<!--                    <providers>-->
+<!--                        <timestamp>-->
+<!--                            <fieldName>log_timestamp</fieldName>-->
+<!--                            <timeZone>UTC</timeZone>-->
+<!--                            <pattern>[UNIX_TIMESTAMP_AS_STRING]</pattern>-->
+<!--                        </timestamp>-->
+
+<!--                        &lt;!&ndash; provides the fields in the configured pattern &ndash;&gt;-->
+<!--                        <pattern>-->
+<!--                            &lt;!&ndash; Pattern documentation - https://logback.qos.ch/manual/layouts.html#Classi
+cPatternLayout &ndash;&gt;-->
+<!--                            <pattern>-->
+<!--                                {-->
+<!--                                "message": "%d{YYYY-MM-dd HH:mm:ss.SSS z} ${HOSTNAME} [priority='%p' thread='%t' user='%X{user}' org='%X{org}' rootTrace='%X{rootTrace}' trace='%X{trace}'] %c:%L - %.-${MAX_MESSAGE_SIZE:-30720}m%n",-->
+<!--                                "region":"${AWS_REGION}",-->
+<!--                                "logger":"%logger{39}",-->
+<!--                                "thread": "%thread",-->
+<!--                                "mdc": "%mdc",-->
+<!--                                "component":"%mdc{component}",-->
+<!--                                "sub_component":"%mdc{subComponent}",-->
+<!--                                "sddc_id":"%mdc{sddcId}",-->
+<!--                                "org_id":"%mdc{orgId}",-->
+<!--                                "target_org":"%mdc{targetOrg}",-->
+<!--                                "op_id":"%mdc{opId}",-->
+<!--                                "marker":"%marker",-->
+<!--                                "exception":"%.-${MAX_MESSAGE_SIZE:-30720}exception",-->
+<!--                                "app_id":"${SERVICE_NAME}",-->
+<!--                                "build":"${BUILD}",-->
+<!--                                "priority": "%p",-->
+<!--                                "user": "%X{user}",-->
+<!--                                "org": "%X{org}",-->
+<!--                                "trace": "%X{trace}",-->
+<!--                                "rootTrace": "%X{rootTrace}",-->
+<!--                                "cont_image": "${CONTAINER_IMAGE}",-->
+<!--                                "cont_name": "${CONTAINER_NAME}",-->
+<!--                                "k8s.pod_name": "${POD_NAME}",-->
+<!--                                "k8s.host": "${KUBERNETES_HOST}",-->
+<!--                                "k8s.namespace": "${KUBERNETES_NAMESPACE}",-->
+<!--                                "hostname": "${POD_NAME}",-->
+<!--                                "service": "${SERVICE_NAME}"-->
+<!--                                }-->
+<!--                            </pattern>-->
+<!--                        </pattern>-->
+<!--                    </providers>-->
+<!--                </encoder>-->
+<!--            </appender>-->
+<!--            <root>-->
+<!--                <appender-ref ref="LOG_FORWARDER" />-->
+<!--            </root>-->
+<!--        </then>-->
+<!--    </if>-->
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_STDOUT"/>
+    </root>
+
+<!--    <variable name="SERVICE_LOG_LEVEL" value="${SERVICE_LOG_LEVEL:-WARN}" />-->
+
+    <logger name="org.springframework.web" level="${SERVICE_LOG_LEVEL:-FATAL}"/>
+    <logger name="org.springframework.boot.cmf" level="FATAL"/>
+    <logger name="org.bouncycastle.jsse.provider.PropertyUtils" level="FATAL"/>
+</configuration>

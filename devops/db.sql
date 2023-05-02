@@ -1,0 +1,5 @@
+
+
+CREATE DATABASE employees;
+
+GRANT ALL PRIVILEGES ON DATABASE "employees" TO jainva;

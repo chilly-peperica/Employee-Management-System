@@ -14,14 +14,14 @@ import java.util.List;
 public class EmployeeDaoImpl implements EmployeeDao {
 
 
-
     public final JdbcTemplate jdbcTemplate;
 
-    EmployeeDaoImpl(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate  = jdbcTemplate;
+    EmployeeDaoImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
+
     @Override
-    public List<Employee> getAllEmployees(){
+    public List<Employee> getAllEmployees() {
         try {
             log.info("Retrieving data from DB");
             return jdbcTemplate.query(DataBaseQueries.GET_ALL_EMPLOYEES, (resultSet, i) -> {
@@ -44,22 +44,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 c.setSalary(resultSet.getInt("salary"));
                 Date date = resultSet.getDate("joining_date");
                 c.setJoiningDate(
-                        date == null ? null : DateUtils.asLocalDate(date) );
+                        date == null ? null : DateUtils.asLocalDate(date));
                 c.setPositionId(resultSet.getInt("position_id"));
 
                 e.setCorporateDetails(c);
 
                 return e;
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Failed to map data from database with message : {} with trace : {}", e.getMessage(), e.getStackTrace());
         }
         return null;
     }
 
     @Override
-    public int createEmployee(CreateEmployeeRequest body)
-    {
+    public int createEmployee(CreateEmployeeRequest body) {
         try {
             PersonalDetails pd = body.getPersonalDetails();
             CorporateDetails cd = body.getCorporateDetails();

@@ -18,20 +18,6 @@ services:
       timeout: 10s
       retries: 10
       start_period: 15s
-
-#  schema:
-#    build: ../postgres-schema
-#    container_name: ds-schema
-#    environment:
-#      POSTGRES_DB_TYPE: local
-#      POSTGRES_DB_HOST_URL: ds-postgres
-#      POSTGRES_DB_PORT: 5432
-#      POSTGRES_DB_USERNAME: data_sink
-#      POSTGRES_DB_PASSWORD: data_sink
-#      POSTGRES_DB_NAME: data_sink
-#    depends_on:
-#      ds-postgres:
-#        condition: service_healthy
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4

@@ -1,5 +1,6 @@
 package com.jainva.api.dao;
 
+import com.jainva.api.mapper.EmployeeMapper;
 import com.jainva.api.utils.DateUtils;
 import com.openapi.gen.springboot.dto.*;
 import lombok.extern.slf4j.Slf4j;
@@ -24,33 +25,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public List<Employee> getAllEmployees() {
         try {
             log.info("Retrieving data from DB");
-            return jdbcTemplate.query(DataBaseQueries.GET_ALL_EMPLOYEES, (resultSet, i) -> {
-                Employee e = new Employee();
-
-                PersonalDetails p = new PersonalDetails();
-                p.setName(resultSet.getString("name"));
-                Address a = new Address();
-                a.setCountry(resultSet.getString("country"));
-                a.setPinCode(resultSet.getLong("pin_code"));
-                a.setCity(resultSet.getString("city"));
-                a.setState(resultSet.getString("state"));
-
-                p.setAddress(a);
-                p.setMobileNumber(resultSet.getString("mobile_number"));
-
-                e.setPersonalDetails(p);
-
-                CorporateDetails c = new CorporateDetails();
-                c.setSalary(resultSet.getInt("salary"));
-                Date date = resultSet.getDate("joining_date");
-                c.setJoiningDate(
-                        date == null ? null : DateUtils.asLocalDate(date));
-                c.setPositionId(resultSet.getInt("position_id"));
-
-                e.setCorporateDetails(c);
-
-                return e;
-            });
+            return jdbcTemplate.query(DataBaseQueries.GET_ALL_EMPLOYEES, new EmployeeMapper());
         } catch (Exception e) {
             log.error("Failed to map data from database with message : {} with trace : {}", e.getMessage(), e.getStackTrace());
         }

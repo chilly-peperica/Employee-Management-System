@@ -54,6 +54,7 @@ public class EmployeServices {
         PersonalDetails p2 = new PersonalDetails();
         CorporateDetails c2 = new CorporateDetails();
         p2.setName("Mark Lohemyer");
+        p2.setMobileNumber("8243431212");
         c2.setSalary(7000000);
         c2.setJoiningDate(LocalDate.now());
         Address a2 = new Address();

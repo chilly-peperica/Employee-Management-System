@@ -123,6 +123,31 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!--JACOCO REPORTS DEPENDENCY :  https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.8</version>
+		</dependency>
+<!--	DEPENDENCY FOR CREATING FAKE VALUES FOR UTs -->
+<!--		<dependency>-->
+<!--			<groupId>com.github.javafaker</groupId>-->
+<!--			<artifactId>javafaker</artifactId>-->
+<!--			<version>1.0.2</version>-->
+<!--		</dependency>-->
+
+<!--		GUAVA CORE LIB - WHEN I ADDED IT AIM WAS TO EASILY HANDLE NULL CHECKS-->
+<!--		<dependency>-->
+<!--			<groupId>com.google.guava</groupId>-->
+<!--			<artifactId>guava</artifactId>-->
+<!--			<version>31.1-jre</version>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>com.google.inject</groupId>-->
+<!--			<artifactId>guice</artifactId>-->
+<!--			<version>5.1.0</version>-->
+<!--		</dependency>-->
 
 	</dependencies>
 
@@ -167,6 +192,28 @@
 								<useTags>true</useTags>
 							</configOptions>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+<!--			PLUGIN FOR INTEGERATING JACOCO REPORTS-->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

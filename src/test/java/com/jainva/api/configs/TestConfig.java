@@ -12,18 +12,9 @@
 //public class TestConfig {
 //
 //    @Bean
-//    @Primary // -> Signifies that it should be give higher priority then other beans
+//    public  produceFaker(){
 //
-//    @ConfigurationProperties("app.datasource.main")
-//    public HikariDataSource hikariDataSource(){
-//        return DataSourceBuilder
-//                .create()
-//                .type(HikariDataSource.class)
-//                .build();
 //    }
 //
-//    @Bean
-//    public JdbcTemplate jdbcTemplate(HikariDataSource hikariDataSource){
-//        return  new JdbcTemplate(hikariDataSource);
-//    }
+//
 //}

@@ -20,4 +20,9 @@ public final class  DataBaseQueries {
             """
                     SELECT * FROM employees;
             """;
+
+    public static String RETRIEVE_EMPLOYEE_VIA_ID =
+            """
+                    SELECT * FROM employees WHERE id = ?;
+            """;
 }

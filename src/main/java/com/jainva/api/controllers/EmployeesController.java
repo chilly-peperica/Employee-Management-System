@@ -1,5 +1,6 @@
 package com.jainva.api.controllers;
 
+import com.jainva.api.exceptions.EmployeeNotFoundException;
 import com.jainva.api.services.EmployeServices;
 import com.openapi.gen.springboot.api.EmployeesDataApi;
 import com.openapi.gen.springboot.dto.CreateEmployeeRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 //****************** SOURCE OF SWAGGER AUTOCODEGEN ******************
 //https://github.com/DevProblems/openapigen-swaggerui-springboot/blob/master/pom.xml
@@ -52,6 +54,20 @@ public class EmployeesController implements EmployeesDataApi {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
         }
+    }
+
+    @Override
+    public ResponseEntity<Employee> getEmployee(String employeeId){
+        try{
+            Long l = Long.parseLong(employeeId);
+            Employee e = empServices.getEmployee(l);
+            return ResponseEntity.ok().body(e);
+        } catch (EmployeeNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body(null);
+        }
+
     }
 
     @GetMapping("api/v1/response")

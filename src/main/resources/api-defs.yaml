@@ -28,8 +28,8 @@ Employee:
   type: object
   properties:
     employee_id:
-      type: string
-      format: uuid
+      type: integer
+      format: int64
     personal_details:
       $ref: '#/PersonalDetails'
     corporate_details:

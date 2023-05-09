@@ -1,7 +1,7 @@
 package com.jainva.api.dao;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.jainva.api.exceptions.EMSException;
+import com.jainva.api.exceptions.EmployeeNotFoundException;
 import com.jainva.api.mapper.EmployeeMapper;
 import com.jainva.api.utils.DateUtils;
 import com.openapi.gen.springboot.dto.CorporateDetails;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Component
 @Slf4j
@@ -33,12 +35,12 @@ public class EmployeeDaoImpl implements EmployeeDao  {
             return jdbcTemplate.query(DataBaseQueries.GET_ALL_EMPLOYEES, new EmployeeMapper());
         } catch (Exception e) {
             log.error("Failed to map data from database with message : {} with trace : {}", e.getMessage(), e.getStackTrace());
+            throw e;
         }
-        return null;
     }
 
     @Override
-    public Employee getEmployee(Long id) throws EMSException {
+    public Employee getEmployee(Long id) throws RuntimeException {
         try {
             log.info("Retrieving data from DB for eid: {} ",id);
             Object[] params = new Object[] {id};
@@ -49,9 +51,7 @@ public class EmployeeDaoImpl implements EmployeeDao  {
                 }
                 throw new EmployeeNotFoundException(String.format("Found %d entries in DB for eid : %d, hence failing employee retrieval", retrievedEmployees.size(), id));
             }
-        } catch (EmployeeNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error("Failed to map data from database with message : {} with trace : {}", e.getMessage(), e.getStackTrace());
             throw new EMSException("Failed to retrieve user from DB");
         }
@@ -59,12 +59,12 @@ public class EmployeeDaoImpl implements EmployeeDao  {
     }
 
     @Override
-    public int createEmployee(CreateEmployeeRequest body) {
+    public int createEmployee(CreateEmployeeRequest body)  {
         try {
             nullCheckForMandatoryParams(body);
             PersonalDetails pd = body.getPersonalDetails();
             CorporateDetails cd = body.getCorporateDetails();
-            int rowsAffected = jdbcTemplate.update(DataBaseQueries.INSERT_EMPLOYEE,
+            int rowsAffected = jdbcTemplate.update( DataBaseQueries.INSERT_EMPLOYEE,
                     pd.getName(), pd.getAddress().getCountry(),
                     pd.getAddress().getPinCode(), pd.getAddress().getCity(),
                     pd.getAddress().getState(), pd.getMobileNumber(),

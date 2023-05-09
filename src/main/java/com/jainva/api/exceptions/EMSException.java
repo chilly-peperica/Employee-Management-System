@@ -1,6 +1,6 @@
 package com.jainva.api.exceptions;
 
-public class EMSException extends Exception {
+public class EMSException extends RuntimeException {
 
     public EMSException(String message) {
         super(message);

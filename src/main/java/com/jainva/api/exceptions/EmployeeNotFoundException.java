@@ -1,6 +1,6 @@
 package com.jainva.api.exceptions;
 
-public class EmployeeNotFoundException extends EMSException{
+public class EmployeeNotFoundException extends RuntimeException{
     public EmployeeNotFoundException(String message) {
 
         super(message);

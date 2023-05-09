@@ -73,21 +73,15 @@ public class EmployeServices {
 
     }
 
-    public Employee createEmployee(CreateEmployeeRequest body) throws Exception {
-        Employee emp = new Employee();
+    public int createEmployee(CreateEmployeeRequest body) throws Exception {
+        int rowsAffected = -1;
         try {
-            int rowsAffected = dbImpl.createEmployee(body);
+             rowsAffected = dbImpl.createEmployee(body);
             log.info("Transaction completed successfully with rows affected : " + rowsAffected);
         } catch (Exception e) {
             throw new Exception("Failed to push data to db with error " + e.getMessage() + "with stacktrace : " + e.getStackTrace());
         }
-
-
-        emp.setPersonalDetails(body.getPersonalDetails());
-        emp.setCorporateDetails(body.getCorporateDetails());
-        CorporateDetails cd = new CorporateDetails();
-        log.info("Pushing the user into db : " + emp + " before is : ");
-        return emp;
+        return rowsAffected;
     }
 
     public List<Employee> getAllEmployees() throws Exception {
@@ -104,8 +98,6 @@ public class EmployeServices {
         try {
             log.info("Trying to retrieve the employee with eid: {} from db", id);
             return dbImpl.getEmployee(id);
-        } catch (EmployeeNotFoundException e) {
-            throw e;
         } catch (Exception e) {
             throw e;
         }

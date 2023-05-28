@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class EmployeeDaoImpl implements EmployeeDao {
+public class EmployeeDaoImpl implements EmployeeDao  {
 
 
     public final JdbcTemplate jdbcTemplate;

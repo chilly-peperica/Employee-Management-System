@@ -1,6 +1,7 @@
 package com.jainva.api.dao;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.jainva.api.mapper.EmployeeMapper;
 import com.jainva.api.utils.DateUtils;
 import com.openapi.gen.springboot.dto.CorporateDetails;
@@ -54,17 +55,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
 
-    private void nullCheckForMandatoryParams(CreateEmployeeRequest body) throws NullPointerException {
-        try{
-        checkNotNull(body.getCorporateDetails(), "Corporate Details can't be null");
-        checkNotNull(body.getPersonalDetails(), "Corporate Details can't be null");
-        PersonalDetails pd = body.getPersonalDetails();
-        CorporateDetails cd = body.getCorporateDetails();
-        checkNotNull(pd.getName(), "Employee name is a mandatory parameter");
-        checkNotNull(pd.getMobileNumber(), "Employee contact number is a mandatory parameter");
-        checkNotNull(cd.getSalary(), "Employee salary is a mandatory parameter");
-        }
-        catch (Exception e){
+    private void nullCheckForMandatoryParams(CreateEmployeeRequest body) {
+        try {
+            checkNotNull(body.getCorporateDetails(), "Corporate Details can't be null");
+            checkNotNull(body.getPersonalDetails(), "Corporate Details can't be null");
+            PersonalDetails pd = body.getPersonalDetails();
+            CorporateDetails cd = body.getCorporateDetails();
+            checkNotNull(pd.getName(), "Employee name is a mandatory parameter");
+            checkNotNull(pd.getMobileNumber(), "Employee contact number is a mandatory parameter");
+            checkNotNull(cd.getSalary(), "Employee salary is a mandatory parameter");
+        } catch (NullPointerException e) {
             throw e;
         }
     }

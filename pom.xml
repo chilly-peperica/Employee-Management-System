@@ -129,25 +129,6 @@
 			<artifactId>jacoco-maven-plugin</artifactId>
 			<version>0.8.8</version>
 		</dependency>
-<!--	DEPENDENCY FOR CREATING FAKE VALUES FOR UTs -->
-<!--		<dependency>-->
-<!--			<groupId>com.github.javafaker</groupId>-->
-<!--			<artifactId>javafaker</artifactId>-->
-<!--			<version>1.0.2</version>-->
-<!--		</dependency>-->
-
-<!--		GUAVA CORE LIB - WHEN I ADDED IT AIM WAS TO EASILY HANDLE NULL CHECKS-->
-<!--		<dependency>-->
-<!--			<groupId>com.google.guava</groupId>-->
-<!--			<artifactId>guava</artifactId>-->
-<!--			<version>31.1-jre</version>-->
-<!--		</dependency>-->
-
-<!--		<dependency>-->
-<!--			<groupId>com.google.inject</groupId>-->
-<!--			<artifactId>guice</artifactId>-->
-<!--			<version>5.1.0</version>-->
-<!--		</dependency>-->
 
 	</dependencies>
 
@@ -157,15 +138,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-<!--	FLYWAY  PLUGIN USED FOR INIT AND DB MIGRATIONS		-->
-<!--			<plugin>-->
-<!--				<groupId>org.flywaydb</groupId>-->
-<!--				<artifactId>flyway-maven-plugin</artifactId>-->
-<!--				<version>9.8.1</version>-->
-<!--			</plugin>-->
-
-<!---->
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>

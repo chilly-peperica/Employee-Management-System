@@ -16,19 +16,18 @@ public class EmployeServices {
 
     Logger log = LoggerFactory.getLogger(EmployeServices.class);
 
-    public EmployeServices(EmployeeDaoImpl dbImpl) throws Exception{
+    public EmployeServices(EmployeeDaoImpl dbImpl) throws Exception {
         try {
             this.dbImpl = dbImpl;
             init();
-        }catch (Exception e){
-            log.info("Error at thus point is : "+e.getMessage() + " with "+e.getStackTrace());
+        } catch (Exception e) {
+            log.info("Error at thus point is : " + e.getMessage() + " with " + e.getStackTrace());
             throw e;
         }
     }
 
 
-
-    public void init()  throws  Exception{
+    public void init() throws Exception {
         CreateEmployeeRequest cer1 = new CreateEmployeeRequest();
         Employee e1 = new Employee();
         PersonalDetails p1 = new PersonalDetails();
@@ -54,6 +53,7 @@ public class EmployeServices {
         PersonalDetails p2 = new PersonalDetails();
         CorporateDetails c2 = new CorporateDetails();
         p2.setName("Mark Lohemyer");
+        p2.setMobileNumber("8243431212");
         c2.setSalary(7000000);
         c2.setJoiningDate(LocalDate.now());
         Address a2 = new Address();
@@ -76,9 +76,9 @@ public class EmployeServices {
         Employee emp = new Employee();
         try {
             int rowsAffected = dbImpl.createEmployee(body);
-            log.info("Transaction completed successfully with rows affected : "+rowsAffected);
+            log.info("Transaction completed successfully with rows affected : " + rowsAffected);
         } catch (Exception e) {
-            throw new Exception("Failed to push data to db with error " + e.getMessage()+ "with stacktrace : "+ e.getStackTrace());
+            throw new Exception("Failed to push data to db with error " + e.getMessage() + "with stacktrace : " + e.getStackTrace());
         }
 
 
@@ -89,11 +89,11 @@ public class EmployeServices {
         return emp;
     }
 
-    public List<Employee> getAllEmployees() throws Exception{
-        try{
+    public List<Employee> getAllEmployees() throws Exception {
+        try {
             log.info("Getting all employees into DB");
             return dbImpl.getAllEmployees();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Exception("Failed to get all employee details due to" + e.getMessage());
         }
     }

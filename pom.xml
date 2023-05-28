@@ -31,6 +31,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+<!--		THIS IS THE LIB MAJORLY WILL BE UESD FOR TESTING-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -114,6 +115,21 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
+<!--		IN MEMORY DB DEPENDENCY USED FOR TESTING PURPOUSES-->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.1.214</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!--JACOCO REPORTS DEPENDENCY :  https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.8</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -122,15 +138,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-<!--	FLYWAY  PLUGIN USED FOR INIT AND DB MIGRATIONS		-->
-<!--			<plugin>-->
-<!--				<groupId>org.flywaydb</groupId>-->
-<!--				<artifactId>flyway-maven-plugin</artifactId>-->
-<!--				<version>9.8.1</version>-->
-<!--			</plugin>-->
-
-<!---->
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
@@ -157,6 +164,28 @@
 								<useTags>true</useTags>
 							</configOptions>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+<!--			PLUGIN FOR INTEGERATING JACOCO REPORTS-->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

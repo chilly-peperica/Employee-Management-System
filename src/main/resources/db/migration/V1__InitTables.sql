@@ -11,10 +11,12 @@
 --postition_id: 16 bytes for a UUID data type
 --16 + 255 + 50 + 8 + 100 + 50 + 10 + 15 + 4 + 16 = 524 bytes
 
- CREATE SEQUENCE employee_id_seq START 100000;
+ CREATE SEQUENCE employee_id_seq START WITH 100000;
 
+--NOTE THAT ORDER WHICH WE SEPCIFY WHILE MENTIONING PROpeRtIES FOR id
+--COLUMNS IS IMP WHLIE USING H2 DB : https://groups.google.com/g/h2-database/c/XvVHoFAVKrA
  create TABLE employees(
-     id integer PRIMARY KEY DEFAULT nextval('employee_id_seq'),
+     id integer  NOT NULL DEFAULT nextval('employee_id_seq') PRIMARY KEY,
  --   Personal Details:
      name varchar(255),
  --      Adresses

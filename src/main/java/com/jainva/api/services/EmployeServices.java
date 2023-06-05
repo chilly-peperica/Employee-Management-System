@@ -1,6 +1,7 @@
 package com.jainva.api.services;
 
 import com.jainva.api.dao.EmployeeDaoImpl;
+import com.jainva.api.exceptions.EmployeeNotFoundException;
 import com.openapi.gen.springboot.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +96,18 @@ public class EmployeServices {
             return dbImpl.getAllEmployees();
         } catch (Exception e) {
             throw new Exception("Failed to get all employee details due to" + e.getMessage());
+        }
+    }
+
+
+    public Employee getEmployee(Long id) throws Exception {
+        try {
+            log.info("Trying to retrieve the employee with eid: {} from db", id);
+            return dbImpl.getEmployee(id);
+        } catch (EmployeeNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
         }
     }
 }

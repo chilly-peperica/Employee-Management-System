@@ -1,12 +1,12 @@
 openapi: 3.0.1
 info:
-  description: Vaibhav Jain's init project
+  description: Vaibhav Jain's Employee Management System
   version: 1.0.0
-  title: Vaibhav Jain's init project
+  title: Vaibhav Jain's Employee Management System
   contact:
-    name: jainva
+    name: Vaibhav Jain
   license:
-    name: 'Copyright (c) 2022 jainva, Inc. All rights reserved.'
+    name: 'Copyright (c) 2023 Vaibhav, Inc. All rights reserved.'
 servers:
   - url: '/api/v1'
 tags:
@@ -60,10 +60,35 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
+
+  '/api/v1/employees/{employeeId}':
+    get:
+      tags:
+        - employees-data
+      summary: Retrieve employee from employee ID
+      description: Get all employees
+      operationId: getEmployee
+      parameters:
+        - $ref: '#/components/parameters/EmployeeIdPathParam'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+
+
 components:
   parameters:
-    deploymentIdPathParam:
-      $ref: 'api-params.yaml#/deploymentIdPathParam'
+    EmployeeIdPathParam:
+      $ref: 'api-params.yaml#/EmployeeIdPathParam'
   schemas:
     GetActivitiesQuery:
       $ref: 'api-defs.yaml#/GetActivitiesQuery'
@@ -73,3 +98,4 @@ components:
       $ref: 'api-defs.yaml#/CreateEmployeeRequest'
     Employee:
       $ref: 'api-defs.yaml#/Employee'
+

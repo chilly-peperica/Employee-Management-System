@@ -12,11 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
 @Slf4j
-public class EmployeeDaoImpl implements EmployeeDao {
+public class EmployeeDaoImpl implements EmployeeDao  {
 
 
     public final JdbcTemplate jdbcTemplate;
@@ -32,6 +33,27 @@ public class EmployeeDaoImpl implements EmployeeDao {
             return jdbcTemplate.query(DataBaseQueries.GET_ALL_EMPLOYEES, new EmployeeMapper());
         } catch (Exception e) {
             log.error("Failed to map data from database with message : {} with trace : {}", e.getMessage(), e.getStackTrace());
+        }
+        return null;
+    }
+
+    @Override
+    public Employee getEmployee(Long id) throws EMSException {
+        try {
+            log.info("Retrieving data from DB for eid: {} ",id);
+            Object[] params = new Object[] {id};
+            List<Employee> retrievedEmployees = jdbcTemplate.query(DataBaseQueries.RETRIEVE_EMPLOYEE_VIA_ID, params, new EmployeeMapper());
+            if (retrievedEmployees != null) {
+                if (retrievedEmployees.size() == 1) {
+                    return retrievedEmployees.get(0);
+                }
+                throw new EmployeeNotFoundException(String.format("Found %d entries in DB for eid : %d, hence failing employee retrieval", retrievedEmployees.size(), id));
+            }
+        } catch (EmployeeNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to map data from database with message : {} with trace : {}", e.getMessage(), e.getStackTrace());
+            throw new EMSException("Failed to retrieve user from DB");
         }
         return null;
     }

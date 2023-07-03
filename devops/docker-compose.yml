@@ -39,7 +39,7 @@ services:
     ports:
       - 8080:8956
     environment:
-      - "DB_HOST_ADDRESS=postgres"
+      - "DB_HOST_ADDRESS=localhost"
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,6 +1,7 @@
 package com.jainva.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jainva.api.exceptions.EMSException;
 import com.jainva.api.services.EmployeServices;
 import com.jainva.api.utils.UrlUtils;
 import com.openapi.gen.springboot.dto.CorporateDetails;
@@ -19,11 +20,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
+
+import javax.servlet.ServletException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.assertj.core.api.Assertions.*;
 
 @EnableConfigurationProperties
 
@@ -73,6 +79,45 @@ class EmployeesControllerTest {
                                 .content(payloadInJson))
                 .andExpect(status().is(HttpStatus.OK.value()));
     }
+
+    @Test
+    @Description("Test 200 response of updated employees API")
+    void updateEmployee() throws Exception {
+
+        CreateEmployeeRequest payload = mockCreateEmployeeRequest();
+        String payloadInJson = objectMapper.writeValueAsString(payload);
+
+
+        when(employeServices.createEmployee(any(CreateEmployeeRequest.class))).thenReturn(0);
+        mockMvc.perform(
+                        post(UrlUtils.CREATE_EMPLOYEE).contentType(MediaType.APPLICATION_JSON)
+                                .content(payloadInJson))
+                .andExpect(status().is(HttpStatus.OK.value()));
+    }
+
+    @Test
+    @Description("Test create employee API to be failing if DB insertion returns invalid responses silently")
+    void createEmployeeFailingDueToSomeErrors() throws Exception {
+
+        CreateEmployeeRequest payload = mockCreateEmployeeRequest();
+        String payloadInJson = objectMapper.writeValueAsString(payload);
+
+
+        when(employeServices.createEmployee(any(CreateEmployeeRequest.class))).thenReturn(-1);
+
+        assertThatThrownBy(() -> {
+
+            mockMvc.perform(
+                    post(UrlUtils.CREATE_EMPLOYEE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(payloadInJson)
+
+            ).andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }).hasRootCauseInstanceOf(EMSException.class);
+
+
+    }
+
 
     @Test
     void getAllEmployeesData() {

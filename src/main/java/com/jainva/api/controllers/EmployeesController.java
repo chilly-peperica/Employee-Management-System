@@ -1,5 +1,6 @@
 package com.jainva.api.controllers;
 
+import com.jainva.api.exceptions.EMSException;
 import com.jainva.api.services.EmployeServices;
 import com.openapi.gen.springboot.api.EmployeesDataApi;
 import com.openapi.gen.springboot.dto.CreateEmployeeRequest;
@@ -32,57 +33,35 @@ public class EmployeesController implements EmployeesDataApi {
 
     @Override
     public ResponseEntity<Void> createEmployee(CreateEmployeeRequest request) {
-        try {
-            if (request.getCorporateDetails().getJoiningDate() == null) {
-                request.getCorporateDetails().setJoiningDate(LocalDate.now());
-            }
-            int responseCode = empServices.createEmployee(request);
-            if (responseCode >= 1) {
-                log.info("Data inserted in DB successfully");
-                return ResponseEntity.ok().build();
-            } else if (responseCode == 0) {
-                log.info("Data is insert into DB but it was an update call as 0 rows were affected");
-                return ResponseEntity.ok().build();
-            } else {
-                throw new RuntimeException("Problem Detected in inserting employee");
-            }
-
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        if (request.getCorporateDetails().getJoiningDate() == null) {
+            request.getCorporateDetails().setJoiningDate(LocalDate.now());
+        }
+        int responseCode = empServices.createEmployee(request);
+        if (responseCode >= 1) {
+            log.info("Data inserted in DB successfully");
+            return ResponseEntity.ok().build();
+        } else if (responseCode == 0) {
+            log.info("Data is insert into DB but it was an update call as 0 rows were affected");
+            return ResponseEntity.ok().build();
+        } else {
+            throw new EMSException("Problem Detected in inserting employee");
         }
     }
 
     @Override
     public ResponseEntity<EmployeesData> getAllEmployeesData() {
         System.out.println("Retrieving all employees from the DB");
-        try {
-            EmployeesData ed = new EmployeesData();
-            ed.setEmployees(empServices.getAllEmployees());
-            return ResponseEntity.ok().body(ed);
-        } catch (RuntimeException e) {
-            log.error("Unchecked exception detected :", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Checked Exception detected from getEmployees methodd:  {} ", e.getMessage());
-            throw new RuntimeException(e.getMessage());
-        }
+        EmployeesData ed = new EmployeesData();
+        ed.setEmployees(empServices.getAllEmployees());
+        return ResponseEntity.ok().body(ed);
     }
 
     @Override
     public ResponseEntity<Employee> getEmployee(String employeeId) {
-        try {
-            Long l = Long.parseLong(employeeId);
-            Employee e = empServices.getEmployee(l);
-            return ResponseEntity.ok().body(e);
-        } catch (RuntimeException e) {
-            log.error("Runtime Failure detected : {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Checked Exception detected from get employee: {} ", e.getMessage());
-            throw new RuntimeException(e.getMessage());
-        }
+        Long l = Long.parseLong(employeeId);
+        Employee e = empServices.getEmployee(l);
+        return ResponseEntity.ok().body(e);
+
     }
 
     @GetMapping("api/v1/response")

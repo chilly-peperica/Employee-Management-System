@@ -1,7 +1,6 @@
 package com.jainva.api.services;
 
 import com.jainva.api.dao.EmployeeDaoImpl;
-import com.jainva.api.exceptions.EmployeeNotFoundException;
 import com.openapi.gen.springboot.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,33 +72,21 @@ public class EmployeServices {
 
     }
 
-    public int createEmployee(CreateEmployeeRequest body) throws Exception {
+    public int createEmployee(CreateEmployeeRequest body) {
         int rowsAffected = -1;
-        try {
-             rowsAffected = dbImpl.createEmployee(body);
-            log.info("Transaction completed successfully with rows affected : " + rowsAffected);
-        } catch (Exception e) {
-            throw new Exception("Failed to push data to db with error " + e.getMessage() + "with stacktrace : " + e.getStackTrace());
-        }
+        rowsAffected = dbImpl.createEmployee(body);
+        log.info("Transaction completed successfully with rows affected : " + rowsAffected);
         return rowsAffected;
     }
 
-    public List<Employee> getAllEmployees() throws Exception {
-        try {
-            log.info("Getting all employees into DB");
-            return dbImpl.getAllEmployees();
-        } catch (Exception e) {
-            throw new Exception("Failed to get all employee details due to" + e.getMessage());
-        }
+    public List<Employee> getAllEmployees() {
+        log.info("Getting all employees into DB");
+        return dbImpl.getAllEmployees();
     }
 
 
-    public Employee getEmployee(Long id) throws Exception {
-        try {
-            log.info("Trying to retrieve the employee with eid: {} from db", id);
-            return dbImpl.getEmployee(id);
-        } catch (Exception e) {
-            throw e;
-        }
+    public Employee getEmployee(Long id) {
+        log.info("Retrieving the employee with eid: {} from db", id);
+        return dbImpl.getEmployee(id);
     }
 }

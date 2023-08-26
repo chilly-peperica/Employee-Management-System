@@ -137,6 +137,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>app</finalName>
+				</configuration>
+
 			</plugin>
 			<plugin>
 				<groupId>org.openapitools</groupId>
@@ -163,6 +167,12 @@
 								<sourceFolder>src/gen/java/main</sourceFolder>
 								<useTags>true</useTags>
 							</configOptions>
+							<additionalProperties>
+								<exceptionHandler>com.example.myproject.MyExceptionHandler</exceptionHandler>
+							</additionalProperties>
+<!--							<config>-->
+<!--								<file>${project.basedir}/src/main/resources/openapi-config/openapi-codegen.yaml</file>-->
+<!--							</config>-->
 						</configuration>
 					</execution>
 				</executions>

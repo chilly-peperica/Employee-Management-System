@@ -2,9 +2,13 @@ package com.jainva.api.dao;
 
 //import com.jainva.api.configs.TestConfig;
 
-import com.jainva.api.utils.DateUtils;
-import com.jainva.api.utils.TestUtils;
-import com.openapi.gen.springboot.dto.*;
+import com.jainva.api.exceptions.EMSException;
+import com.jainva.api.exceptions.EmployeeNotFoundException;
+import com.jainva.api.mocker.EmployeeMocker;
+import com.openapi.gen.springboot.dto.CorporateDetails;
+import com.openapi.gen.springboot.dto.CreateEmployeeRequest;
+import com.openapi.gen.springboot.dto.Employee;
+import com.openapi.gen.springboot.dto.PersonalDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -49,45 +52,21 @@ class EmployeeDaoImplTest {
     @Test
     @DisplayName("Create Employee API is working fine")
     void createEmployeeWorkingFine() {
-        CreateEmployeeRequest body = new CreateEmployeeRequest();
-        PersonalDetails p = new PersonalDetails();
-        String name = "Vaibhav Jain";
-        String mobNo = "8826421272";
-        p.setMobileNumber(mobNo);
-        p.setName(name);
-
-        Address a = new Address();
-        a.setCity("Delhi");
-        a.setState("Delhi");
-        Long pinCode = 110085L;
-        a.setPinCode(pinCode);
-        String country = "India";
-        a.setCountry(country);
-
-        p.setAddress(a);
-
-        CorporateDetails c = new CorporateDetails();
-        c.setJoiningDate(DateUtils.asLocalDate(new Date(2021, 9, 6)));
-        int salary = 2000000;
-        c.setSalary(salary);
-
-        body.setCorporateDetails(c);
-        body.setPersonalDetails(p);
-
-        int res = daoImpl.createEmployee(body);
+        CreateEmployeeRequest body = EmployeeMocker.createEmployeeMockPayload();
+        int res = EmployeeMocker.createMockEmployee(daoImpl, body);
         assertThat(res).isEqualTo(1);
 
         List<Employee> employees = daoImpl.getAllEmployees();
         employees.stream()
-                .filter(employee -> employee.getPersonalDetails().getName().equals(name))
+                .filter(employee -> employee.getPersonalDetails().getName().equals(body.getPersonalDetails().getName()))
                 .map(employee -> {
                     assertThat(employee.getEmployeeId()).isNotNull();
                     PersonalDetails per = employee.getPersonalDetails();
-                    assertThat(p.getAddress()).isNotNull();
-                    assertThat(p.getMobileNumber()).isNotNull();
-                    assertThat(p.getAddress().getCountry()).isEqualTo(country);
+                    assertThat(per.getAddress()).isNotNull();
+                    assertThat(per.getMobileNumber()).isNotNull();
+                    assertThat(per.getAddress().getCountry()).isEqualTo(body.getPersonalDetails().getAddress().getCountry());
                     CorporateDetails cd = employee.getCorporateDetails();
-                    assertThat(cd.getSalary()).isEqualTo(salary);
+                    assertThat(cd.getSalary()).isEqualTo(body.getCorporateDetails().getSalary());
                     return employee;
                 });
 
@@ -96,15 +75,40 @@ class EmployeeDaoImplTest {
     @Test
     @DisplayName("Create employee failed to create employee, due to invalid input params")
     void createEmployeeFailed() {
-        CreateEmployeeRequest body = TestUtils.mockCreateEmployeeRequest();
+        CreateEmployeeRequest body = EmployeeMocker.createEmployeeMockPayload();
         body.getPersonalDetails().setName(null);
         log.info("Test case is being started here:");
         assertThatThrownBy(() -> {
             daoImpl.createEmployee(body);
-        }).isInstanceOf(NullPointerException.class)
+        }).isInstanceOf(EMSException.class)
                 .hasMessageContaining("Employee name is a mandatory parameter");
-
 
     }
 
+
+    @Test
+    @DisplayName("Get Employee from employee-id API is working fine")
+    void getEmployeeFromEidWorkingCorrectly() {
+        CreateEmployeeRequest body = EmployeeMocker.createEmployeeMockPayload();
+        int res = EmployeeMocker.createMockEmployee(daoImpl, body);
+        assertThat(res).isEqualTo(1);
+
+        List<Employee> employees = daoImpl.getAllEmployees();
+        Employee someEmployee = employees.get(0);
+        assertThat(daoImpl.getEmployee(someEmployee.getEmployeeId())).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Get Employee from employee-id API should fail with employee not found")
+    void getEmployeeFromEidShouldFailWithNotFoundException() {
+        CreateEmployeeRequest body = EmployeeMocker.createEmployeeMockPayload();
+        int res = EmployeeMocker.createMockEmployee(daoImpl, body);
+        assertThat(res).isEqualTo(1);
+
+        assertThatThrownBy(()->{
+            daoImpl.getEmployee(28910029L);
+        }).isInstanceOfAny(EmployeeNotFoundException.class);
+
+    }
 }

@@ -1,11 +1,17 @@
-package com.jainva.api.utils;
+package com.jainva.api.mocker;
 
-import com.openapi.gen.springboot.dto.*;
+import com.jainva.api.dao.EmployeeDaoImpl;
+import com.jainva.api.utils.DateUtils;
+import com.openapi.gen.springboot.dto.Address;
+import com.openapi.gen.springboot.dto.CorporateDetails;
+import com.openapi.gen.springboot.dto.CreateEmployeeRequest;
+import com.openapi.gen.springboot.dto.PersonalDetails;
 
 import java.util.Date;
 
-public class TestUtils {
-    public static CreateEmployeeRequest mockCreateEmployeeRequest(){
+public class EmployeeMocker {
+
+    public static CreateEmployeeRequest createEmployeeMockPayload(){
         CreateEmployeeRequest body = new CreateEmployeeRequest();
         PersonalDetails p = new PersonalDetails();
         String name = "Vaibhav Jain";
@@ -24,13 +30,18 @@ public class TestUtils {
         p.setAddress(a);
 
         CorporateDetails c = new CorporateDetails();
-        c.setJoiningDate(DateUtils.asLocalDate(new Date(2021,9,6)));
+        c.setJoiningDate(DateUtils.asLocalDate(new Date(2021, 9, 6)));
         int salary = 2000000;
         c.setSalary(salary);
 
         body.setCorporateDetails(c);
         body.setPersonalDetails(p);
         return body;
-
     }
+    public  static int createMockEmployee(EmployeeDaoImpl daoImpl, CreateEmployeeRequest body){
+
+
+        return daoImpl.createEmployee(body);
+    }
+
 }

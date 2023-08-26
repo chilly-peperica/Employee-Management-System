@@ -31,6 +31,19 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  ems:
+    image: ems
+    build:
+      context: ../
+    container_name: employee-management-system
+    ports:
+      - 8080:8956
+    environment:
+      - "DB_HOST_ADDRESS=localhost"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 networks:
   postgres:
     driver: bridge
